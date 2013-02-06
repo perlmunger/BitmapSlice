@@ -36,15 +36,13 @@
   // the simulator faired better. Works great on iPad2, though, so go
   // buy one of those. Mmmmkay?
   
-//  dispatch_queue_t tilingQueue = dispatch_queue_create("tilingQueue", NULL);
-//  dispatch_async(tilingQueue, ^{
-//    UIImage *big = [UIImage imageNamed:@"bigimage.png"];
-//    [self saveTilesOfSize:(CGSize){256, 256} forImage:big toDirectory:directoryPath usingPrefix:@"bigimage_"];
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//      [scrollView setNeedsDisplay];
-//    });
-//  });
-//  dispatch_release(tilingQueue);
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    UIImage *big = [UIImage imageNamed:@"bigimage.png"];
+    [self saveTilesOfSize:(CGSize){256, 256} forImage:big toDirectory:directoryPath usingPrefix:@"bigimage_"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [scrollView setNeedsDisplay];
+    });
+  });
 
   TileView *tv = [[TileView alloc] initWithFrame:(CGRect){{0,0}, (CGSize){5000,5000}}];
   [tv setTileTag:@"bigimage_"];
@@ -99,6 +97,9 @@
                                         (CGRect){{x*size.width, y*size.height}, 
                                           tileSize});
       NSData *imageData = UIImagePNGRepresentation([UIImage imageWithCGImage:tileImage]);
+      
+      CGImageRelease(tileImage);
+      
       NSString *path = [NSString stringWithFormat:@"%@/%@%d_%d.png", 
                         directoryPath, prefix, x, y];
       [imageData writeToFile:path atomically:NO];
