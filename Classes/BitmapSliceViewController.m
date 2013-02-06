@@ -29,12 +29,6 @@
 
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
   NSString *directoryPath = [paths objectAtIndex:0];
-
-  // Uncomment these lines to actually tile the image. You would only
-  // need to do this once. In my tests, it was big enough to crash
-  // the app, so you may need to use a smaller image. Running it on
-  // the simulator faired better. Works great on iPad2, though, so go
-  // buy one of those. Mmmmkay?
   
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     UIImage *big = [UIImage imageNamed:@"bigimage.png"];
